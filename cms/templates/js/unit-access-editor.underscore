@@ -1,0 +1,46 @@
+<%
+var groupAccess = xblockInfo.get('group_access');
+var userPartitions = xblockInfo.get('user_partitions');
+%>
+<form>
+<h3 class="modal-section-title access-change">
+    <%- gettext('Unit Access') %>
+</h3>
+<div class="modal-section-content access-change">
+    <label class="group-select-title"><%- gettext('Restrict access to:') %>
+        <select class="user-partition-select" id="partition-select">
+            <option value="-1" selected ="selected"><%- gettext('Select a group type') %></option>
+            <% for (var i=0; i < userPartitions.length; i++) { %>
+                <option id="<%- userPartitions[i].id %>-option" value="<%- userPartitions[i].id %>"><%- userPartitions[i].name %></option>
+            <% } %>
+        </select>
+    </label>
+    <br>
+    <% if (userPartitions.length > 0) { %>
+        <div class="user-partition-group-checkboxes">
+            <% for (var i=0; i < userPartitions.length; i++) { %>
+                <div role="group" aria-labelledby="partition-group-directions-<%- userPartitions[i].id %>" id="<%- userPartitions[i].id %>-checkboxes">
+                    <div class="partition-group-directions" id="partition-group-directions-<%- userPartitions[i].id %>">
+                        <%- gettext('Select one or more groups:') %>
+                        <% for (var j = 0; j < userPartitions[i].groups.length; j++) { %>
+                            <div class="field partition-group-control">
+                                <input type="checkbox" id="content-group-<%- userPartitions[i].groups[j].id %>" value="<%- userPartitions[i].groups[j].id %>" class="input input-checkbox"
+                                    <%  if (userPartitions[i].groups[j].selected || userPartitions[i].groups[j].deleted) { %> checked="checked" <% } %> />
+                                <% if (userPartitions[i].groups[j].deleted) { %>
+                                    <label for="content-group-<%- userPartitions[i].groups[j].id %>" class="label deleted">
+                                        <%- gettext('Deleted Group') %>
+                                        <span class="deleted-group-message"><%- gettext('This group no longer exists. Choose another group or do not restrict access to this unit.') %></span>
+                                <% } else { %>
+                                    <label for="content-group-<%-userPartitions[i].groups[j].id %>" class="label">
+                                        <%- userPartitions[i].groups[j].name %>
+                                    </label>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } %>
+</div>
+</form>
